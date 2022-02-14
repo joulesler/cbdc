@@ -1,24 +1,24 @@
 {
   "contractName": "LibAuthorisation",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Authorisation/LibAuthorisation.sol\":\"LibAuthorisation\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Authorisation/LibAuthorisation.sol\":{\"keccak256\":\"0x9d384abd99315576bd231553274d2541b407bd053f640d2c86c932702418d379\",\"urls\":[\"bzz-raw://17db9174fd0c8498132907a12a006a543eb6e4c050f8d632d9064073a5b2525a\",\"dweb:/ipfs/QmNv1u5EAwjWWdyNdGLUBbBNASbewfFG4ggHkbnnavYkuu\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b97efac92d182f6c2e1b6b1a0eb146630a020086bf6c4b2296f409d8414ef9af64736f6c634300080a0033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b97efac92d182f6c2e1b6b1a0eb146630a020086bf6c4b2296f409d8414ef9af64736f6c634300080a0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Authorisation/LibAuthorisation.sol\":\"LibAuthorisation\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Authorisation/LibAuthorisation.sol\":{\"keccak256\":\"0xbdf0c1f8a2abebe787c514052a274e529b43f7541fc3337193c5317d046f085c\",\"urls\":[\"bzz-raw://2fb9030a6fe6b6be1e574d2a7e2b32d118ac48048fd476c1b639e665bd9c8048\",\"dweb:/ipfs/QmXhfhovmCwRbX5CuX3KYXuT3myHiSGArRjmVfqrvtPXS9\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122084326cc7b954c3a8848a4dff84492dd1aa81e0f7ade6255e4b716e28563531fb64736f6c634300080a0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122084326cc7b954c3a8848a4dff84492dd1aa81e0f7ade6255e4b716e28563531fb64736f6c634300080a0033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "27:1231:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "27:1231:1:-:0;;;;;;;;",
-  "source": "pragma solidity ^0.8.0;\r\n\r\nlibrary LibAuthorisation{\r\n    \r\n    bytes private constant AUTHORISATION_STORAGE = \"lib.authorisation\";\r\n\r\n    struct AuthorisationStorage{\r\n        address contractOwner;\r\n        mapping(address => Authorisation) authorisations;\r\n        address[] authorisationIndex;\r\n    }\r\n\r\n    struct Authorisation{\r\n        address owner;\r\n        Permissions permission;\r\n    }\r\n\r\n    enum Permissions{\r\n        unrecognised,\r\n        user,\r\n        admin,\r\n        count\r\n    }\r\n\r\n    function isUser(address _address) internal view returns (bool authorised){\r\n        AuthorisationStorage storage authStore = authorisationStorage();\r\n        return authStore.authorisations[_address].permission == Permissions.user;\r\n    }\r\n\r\n    function isAdmin(address _address) internal view returns (bool authorised){\r\n        AuthorisationStorage storage authStore = authorisationStorage();\r\n        return authStore.authorisations[_address].permission == Permissions.admin;\r\n    }\r\n\r\n    function authorisationStorage() internal pure returns(AuthorisationStorage storage authStore) {\r\n        bytes32 AUTHORISATION_STORAGE_POSITION = keccak256(AUTHORISATION_STORAGE);\r\n        assembly {authStore.slot := AUTHORISATION_STORAGE_POSITION}\r\n    }\r\n}",
+  "sourceMap": "27:1448:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "27:1448:1:-:0;;;;;;;;",
+  "source": "pragma solidity ^0.8.0;\r\n\r\nlibrary LibAuthorisation{\r\n    \r\n    bytes private constant AUTHORISATION_STORAGE = \"lib.authorisation\";\r\n\r\n    struct AuthorisationStorage{\r\n        address contractOwner;\r\n        mapping(address => Authorisation) authorisations;\r\n        address[] authorisationIndex;\r\n    }\r\n\r\n    struct Authorisation{\r\n        address owner;\r\n        Permissions permission;\r\n    }\r\n\r\n    enum Permissions{\r\n        unrecognised,\r\n        user,\r\n        admin,\r\n        count\r\n    }\r\n\r\n    modifier onlyContractOwner()\r\n    {\r\n        AuthorisationStorage storage authStore = LibAuthorisation.authorisationStorage();\r\n        require(msg.sender == authStore.contractOwner);\r\n        _;   \r\n    }\r\n    \r\n    function isUser(address _address) internal view returns (bool authorised){\r\n        AuthorisationStorage storage authStore = authorisationStorage();\r\n        return authStore.authorisations[_address].permission == Permissions.user;\r\n    }\r\n\r\n    function isAdmin(address _address) internal view returns (bool authorised){\r\n        AuthorisationStorage storage authStore = authorisationStorage();\r\n        return authStore.authorisations[_address].permission == Permissions.admin;\r\n    }\r\n\r\n    function authorisationStorage() internal pure returns(AuthorisationStorage storage authStore) {\r\n        bytes32 AUTHORISATION_STORAGE_POSITION = keccak256(AUTHORISATION_STORAGE);\r\n        assembly {authStore.slot := AUTHORISATION_STORAGE_POSITION}\r\n    }\r\n}",
   "sourcePath": "C:\\Users\\Julia\\Documents\\Development\\Blockchain\\CBDC\\smart_contracts\\contracts\\Authorisation\\LibAuthorisation.sol",
   "ast": {
     "absolutePath": "project:/contracts/Authorisation/LibAuthorisation.sol",
     "exportedSymbols": {
       "LibAuthorisation": [
-        470
+        489
       ]
     },
-    "id": 471,
+    "id": 490,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -39,9 +39,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 470,
+        "id": 489,
         "linearizedBaseContracts": [
-          470
+          489
         ],
         "name": "LibAuthorisation",
         "nameLocation": "35:16:1",
@@ -54,7 +54,7 @@
             "name": "AUTHORISATION_STORAGE",
             "nameLocation": "87:21:1",
             "nodeType": "VariableDeclaration",
-            "scope": 470,
+            "scope": 489,
             "src": "64:66:1",
             "stateVariable": true,
             "storageLocation": "default",
@@ -216,7 +216,7 @@
             "name": "AuthorisationStorage",
             "nameLocation": "146:20:1",
             "nodeType": "StructDefinition",
-            "scope": 470,
+            "scope": 489,
             "src": "139:165:1",
             "visibility": "public"
           },
@@ -290,7 +290,7 @@
             "name": "Authorisation",
             "nameLocation": "319:13:1",
             "nodeType": "StructDefinition",
-            "scope": 470,
+            "scope": 489,
             "src": "312:85:1",
             "visibility": "public"
           },
@@ -334,24 +334,24 @@
           },
           {
             "body": {
-              "id": 431,
+              "id": 427,
               "nodeType": "Block",
-              "src": "579:165:1",
+              "src": "540:171:1",
               "statements": [
                 {
                   "assignments": [
-                    418
+                    413
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 418,
+                      "id": 413,
                       "mutability": "mutable",
                       "name": "authStore",
-                      "nameLocation": "619:9:1",
+                      "nameLocation": "580:9:1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 431,
-                      "src": "590:38:1",
+                      "scope": 427,
+                      "src": "551:38:1",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
@@ -359,17 +359,17 @@
                         "typeString": "struct LibAuthorisation.AuthorisationStorage"
                       },
                       "typeName": {
-                        "id": 417,
+                        "id": 412,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 416,
+                          "id": 411,
                           "name": "AuthorisationStorage",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 398,
-                          "src": "590:20:1"
+                          "src": "551:20:1"
                         },
                         "referencedDeclaration": 398,
-                        "src": "590:20:1",
+                        "src": "551:20:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                           "typeString": "struct LibAuthorisation.AuthorisationStorage"
@@ -378,23 +378,38 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 421,
+                  "id": 417,
                   "initialValue": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 419,
-                      "name": "authorisationStorage",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 469,
-                      "src": "631:20:1",
+                      "expression": {
+                        "id": 414,
+                        "name": "LibAuthorisation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 489,
+                        "src": "592:16:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_LibAuthorisation_$489_$",
+                          "typeString": "type(library LibAuthorisation)"
+                        }
+                      },
+                      "id": 415,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "authorisationStorage",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 488,
+                      "src": "592:37:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$__$returns$_t_struct$_AuthorisationStorage_$398_storage_ptr_$",
                         "typeString": "function () pure returns (struct LibAuthorisation.AuthorisationStorage storage pointer)"
                       }
                     },
-                    "id": 420,
+                    "id": 416,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -402,7 +417,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "631:22:1",
+                    "src": "592:39:1",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
@@ -410,7 +425,223 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "590:63:1"
+                  "src": "551:80:1"
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 423,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "expression": {
+                            "id": 419,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4294967281,
+                            "src": "650:3:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 420,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "src": "650:10:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "expression": {
+                            "id": 421,
+                            "name": "authStore",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 413,
+                            "src": "664:9:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                              "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
+                            }
+                          },
+                          "id": 422,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "contractOwner",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 389,
+                          "src": "664:23:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "650:37:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 418,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
+                      "referencedDeclaration": 4294967278,
+                      "src": "642:7:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 424,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "642:46:1",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 425,
+                  "nodeType": "ExpressionStatement",
+                  "src": "642:46:1"
+                },
+                {
+                  "id": 426,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "699:1:1"
+                }
+              ]
+            },
+            "id": 428,
+            "name": "onlyContractOwner",
+            "nameLocation": "515:17:1",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 410,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "532:2:1"
+            },
+            "src": "506:205:1",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 450,
+              "nodeType": "Block",
+              "src": "796:165:1",
+              "statements": [
+                {
+                  "assignments": [
+                    437
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 437,
+                      "mutability": "mutable",
+                      "name": "authStore",
+                      "nameLocation": "836:9:1",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 450,
+                      "src": "807:38:1",
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                        "typeString": "struct LibAuthorisation.AuthorisationStorage"
+                      },
+                      "typeName": {
+                        "id": 436,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 435,
+                          "name": "AuthorisationStorage",
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 398,
+                          "src": "807:20:1"
+                        },
+                        "referencedDeclaration": 398,
+                        "src": "807:20:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                          "typeString": "struct LibAuthorisation.AuthorisationStorage"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 440,
+                  "initialValue": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 438,
+                      "name": "authorisationStorage",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 488,
+                      "src": "848:20:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$__$returns$_t_struct$_AuthorisationStorage_$398_storage_ptr_$",
+                        "typeString": "function () pure returns (struct LibAuthorisation.AuthorisationStorage storage pointer)"
+                      }
+                    },
+                    "id": 439,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "848:22:1",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                      "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "807:63:1"
                 },
                 {
                   "expression": {
@@ -418,7 +649,7 @@
                       "typeIdentifier": "t_enum$_Permissions_$409",
                       "typeString": "enum LibAuthorisation.Permissions"
                     },
-                    "id": 429,
+                    "id": 448,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -427,18 +658,18 @@
                       "expression": {
                         "baseExpression": {
                           "expression": {
-                            "id": 422,
+                            "id": 441,
                             "name": "authStore",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 418,
-                            "src": "671:9:1",
+                            "referencedDeclaration": 437,
+                            "src": "888:9:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                               "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
                             }
                           },
-                          "id": 423,
+                          "id": 442,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -446,20 +677,20 @@
                           "memberName": "authorisations",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": 394,
-                          "src": "671:24:1",
+                          "src": "888:24:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Authorisation_$404_storage_$",
                             "typeString": "mapping(address => struct LibAuthorisation.Authorisation storage ref)"
                           }
                         },
-                        "id": 425,
+                        "id": 444,
                         "indexExpression": {
-                          "id": 424,
+                          "id": 443,
                           "name": "_address",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 411,
-                          "src": "696:8:1",
+                          "referencedDeclaration": 430,
+                          "src": "913:8:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -470,13 +701,13 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "671:34:1",
+                        "src": "888:34:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_Authorisation_$404_storage",
                           "typeString": "struct LibAuthorisation.Authorisation storage ref"
                         }
                       },
-                      "id": 426,
+                      "id": 445,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -484,7 +715,7 @@
                       "memberName": "permission",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 403,
-                      "src": "671:45:1",
+                      "src": "888:45:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
@@ -494,18 +725,18 @@
                     "operator": "==",
                     "rightExpression": {
                       "expression": {
-                        "id": 427,
+                        "id": 446,
                         "name": "Permissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 409,
-                        "src": "720:11:1",
+                        "src": "937:11:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_type$_t_enum$_Permissions_$409_$",
                           "typeString": "type(enum LibAuthorisation.Permissions)"
                         }
                       },
-                      "id": 428,
+                      "id": 447,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -513,45 +744,45 @@
                       "memberName": "user",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 406,
-                      "src": "720:16:1",
+                      "src": "937:16:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
                       }
                     },
-                    "src": "671:65:1",
+                    "src": "888:65:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 415,
-                  "id": 430,
+                  "functionReturnParameters": 434,
+                  "id": 449,
                   "nodeType": "Return",
-                  "src": "664:72:1"
+                  "src": "881:72:1"
                 }
               ]
             },
-            "id": 432,
+            "id": 451,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isUser",
-            "nameLocation": "515:6:1",
+            "nameLocation": "732:6:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 412,
+              "id": 431,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 411,
+                  "id": 430,
                   "mutability": "mutable",
                   "name": "_address",
-                  "nameLocation": "530:8:1",
+                  "nameLocation": "747:8:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 432,
-                  "src": "522:16:1",
+                  "scope": 451,
+                  "src": "739:16:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -559,10 +790,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 410,
+                    "id": 429,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "522:7:1",
+                    "src": "739:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -572,21 +803,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "521:18:1"
+              "src": "738:18:1"
             },
             "returnParameters": {
-              "id": 415,
+              "id": 434,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 414,
+                  "id": 433,
                   "mutability": "mutable",
                   "name": "authorised",
-                  "nameLocation": "568:10:1",
+                  "nameLocation": "785:10:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 432,
-                  "src": "563:15:1",
+                  "scope": 451,
+                  "src": "780:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -594,10 +825,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 413,
+                    "id": 432,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "563:4:1",
+                    "src": "780:4:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -606,34 +837,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "562:17:1"
+              "src": "779:17:1"
             },
-            "scope": 470,
-            "src": "506:238:1",
+            "scope": 489,
+            "src": "723:238:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 454,
+              "id": 473,
               "nodeType": "Block",
-              "src": "826:166:1",
+              "src": "1043:166:1",
               "statements": [
                 {
                   "assignments": [
-                    441
+                    460
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 441,
+                      "id": 460,
                       "mutability": "mutable",
                       "name": "authStore",
-                      "nameLocation": "866:9:1",
+                      "nameLocation": "1083:9:1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 454,
-                      "src": "837:38:1",
+                      "scope": 473,
+                      "src": "1054:38:1",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
@@ -641,17 +872,17 @@
                         "typeString": "struct LibAuthorisation.AuthorisationStorage"
                       },
                       "typeName": {
-                        "id": 440,
+                        "id": 459,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 439,
+                          "id": 458,
                           "name": "AuthorisationStorage",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 398,
-                          "src": "837:20:1"
+                          "src": "1054:20:1"
                         },
                         "referencedDeclaration": 398,
-                        "src": "837:20:1",
+                        "src": "1054:20:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                           "typeString": "struct LibAuthorisation.AuthorisationStorage"
@@ -660,23 +891,23 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 444,
+                  "id": 463,
                   "initialValue": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 442,
+                      "id": 461,
                       "name": "authorisationStorage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 469,
-                      "src": "878:20:1",
+                      "referencedDeclaration": 488,
+                      "src": "1095:20:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$__$returns$_t_struct$_AuthorisationStorage_$398_storage_ptr_$",
                         "typeString": "function () pure returns (struct LibAuthorisation.AuthorisationStorage storage pointer)"
                       }
                     },
-                    "id": 443,
+                    "id": 462,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -684,7 +915,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "878:22:1",
+                    "src": "1095:22:1",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
@@ -692,7 +923,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "837:63:1"
+                  "src": "1054:63:1"
                 },
                 {
                   "expression": {
@@ -700,7 +931,7 @@
                       "typeIdentifier": "t_enum$_Permissions_$409",
                       "typeString": "enum LibAuthorisation.Permissions"
                     },
-                    "id": 452,
+                    "id": 471,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -709,18 +940,18 @@
                       "expression": {
                         "baseExpression": {
                           "expression": {
-                            "id": 445,
+                            "id": 464,
                             "name": "authStore",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 441,
-                            "src": "918:9:1",
+                            "referencedDeclaration": 460,
+                            "src": "1135:9:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                               "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
                             }
                           },
-                          "id": 446,
+                          "id": 465,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -728,20 +959,20 @@
                           "memberName": "authorisations",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": 394,
-                          "src": "918:24:1",
+                          "src": "1135:24:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Authorisation_$404_storage_$",
                             "typeString": "mapping(address => struct LibAuthorisation.Authorisation storage ref)"
                           }
                         },
-                        "id": 448,
+                        "id": 467,
                         "indexExpression": {
-                          "id": 447,
+                          "id": 466,
                           "name": "_address",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 434,
-                          "src": "943:8:1",
+                          "referencedDeclaration": 453,
+                          "src": "1160:8:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -752,13 +983,13 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "918:34:1",
+                        "src": "1135:34:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_Authorisation_$404_storage",
                           "typeString": "struct LibAuthorisation.Authorisation storage ref"
                         }
                       },
-                      "id": 449,
+                      "id": 468,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -766,7 +997,7 @@
                       "memberName": "permission",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 403,
-                      "src": "918:45:1",
+                      "src": "1135:45:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
@@ -776,18 +1007,18 @@
                     "operator": "==",
                     "rightExpression": {
                       "expression": {
-                        "id": 450,
+                        "id": 469,
                         "name": "Permissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 409,
-                        "src": "967:11:1",
+                        "src": "1184:11:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_type$_t_enum$_Permissions_$409_$",
                           "typeString": "type(enum LibAuthorisation.Permissions)"
                         }
                       },
-                      "id": 451,
+                      "id": 470,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -795,45 +1026,45 @@
                       "memberName": "admin",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 407,
-                      "src": "967:17:1",
+                      "src": "1184:17:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
                       }
                     },
-                    "src": "918:66:1",
+                    "src": "1135:66:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 438,
-                  "id": 453,
+                  "functionReturnParameters": 457,
+                  "id": 472,
                   "nodeType": "Return",
-                  "src": "911:73:1"
+                  "src": "1128:73:1"
                 }
               ]
             },
-            "id": 455,
+            "id": 474,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isAdmin",
-            "nameLocation": "761:7:1",
+            "nameLocation": "978:7:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 435,
+              "id": 454,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 434,
+                  "id": 453,
                   "mutability": "mutable",
                   "name": "_address",
-                  "nameLocation": "777:8:1",
+                  "nameLocation": "994:8:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 455,
-                  "src": "769:16:1",
+                  "scope": 474,
+                  "src": "986:16:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -841,10 +1072,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 433,
+                    "id": 452,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "769:7:1",
+                    "src": "986:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -854,21 +1085,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "768:18:1"
+              "src": "985:18:1"
             },
             "returnParameters": {
-              "id": 438,
+              "id": 457,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 437,
+                  "id": 456,
                   "mutability": "mutable",
                   "name": "authorised",
-                  "nameLocation": "815:10:1",
+                  "nameLocation": "1032:10:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 455,
-                  "src": "810:15:1",
+                  "scope": 474,
+                  "src": "1027:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -876,10 +1107,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 436,
+                    "id": 455,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "810:4:1",
+                    "src": "1027:4:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -888,34 +1119,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "809:17:1"
+              "src": "1026:17:1"
             },
-            "scope": 470,
-            "src": "752:240:1",
+            "scope": 489,
+            "src": "969:240:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 468,
+              "id": 487,
               "nodeType": "Block",
-              "src": "1094:161:1",
+              "src": "1311:161:1",
               "statements": [
                 {
                   "assignments": [
-                    462
+                    481
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 462,
+                      "id": 481,
                       "mutability": "mutable",
                       "name": "AUTHORISATION_STORAGE_POSITION",
-                      "nameLocation": "1113:30:1",
+                      "nameLocation": "1330:30:1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 468,
-                      "src": "1105:38:1",
+                      "scope": 487,
+                      "src": "1322:38:1",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -923,10 +1154,10 @@
                         "typeString": "bytes32"
                       },
                       "typeName": {
-                        "id": 461,
+                        "id": 480,
                         "name": "bytes32",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1105:7:1",
+                        "src": "1322:7:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
                           "typeString": "bytes32"
@@ -935,16 +1166,16 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 466,
+                  "id": 485,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 464,
+                        "id": 483,
                         "name": "AUTHORISATION_STORAGE",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 387,
-                        "src": "1156:21:1",
+                        "src": "1373:21:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
                           "typeString": "bytes memory"
@@ -958,18 +1189,18 @@
                           "typeString": "bytes memory"
                         }
                       ],
-                      "id": 463,
+                      "id": 482,
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 4294967288,
-                      "src": "1146:9:1",
+                      "src": "1363:9:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
                         "typeString": "function (bytes memory) pure returns (bytes32)"
                       }
                     },
-                    "id": 465,
+                    "id": 484,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -977,7 +1208,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1146:32:1",
+                    "src": "1363:32:1",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
@@ -985,26 +1216,26 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1105:73:1"
+                  "src": "1322:73:1"
                 },
                 {
                   "AST": {
                     "nodeType": "YulBlock",
-                    "src": "1198:50:1",
+                    "src": "1415:50:1",
                     "statements": [
                       {
                         "nodeType": "YulAssignment",
-                        "src": "1199:48:1",
+                        "src": "1416:48:1",
                         "value": {
                           "name": "AUTHORISATION_STORAGE_POSITION",
                           "nodeType": "YulIdentifier",
-                          "src": "1217:30:1"
+                          "src": "1434:30:1"
                         },
                         "variableNames": [
                           {
                             "name": "authStore.slot",
                             "nodeType": "YulIdentifier",
-                            "src": "1199:14:1"
+                            "src": "1416:14:1"
                           }
                         ]
                       }
@@ -1013,53 +1244,53 @@
                   "evmVersion": "london",
                   "externalReferences": [
                     {
-                      "declaration": 462,
+                      "declaration": 481,
                       "isOffset": false,
                       "isSlot": false,
-                      "src": "1217:30:1",
+                      "src": "1434:30:1",
                       "valueSize": 1
                     },
                     {
-                      "declaration": 459,
+                      "declaration": 478,
                       "isOffset": false,
                       "isSlot": true,
-                      "src": "1199:14:1",
+                      "src": "1416:14:1",
                       "suffix": "slot",
                       "valueSize": 1
                     }
                   ],
-                  "id": 467,
+                  "id": 486,
                   "nodeType": "InlineAssembly",
-                  "src": "1189:59:1"
+                  "src": "1406:59:1"
                 }
               ]
             },
-            "id": 469,
+            "id": 488,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "authorisationStorage",
-            "nameLocation": "1009:20:1",
+            "nameLocation": "1226:20:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 456,
+              "id": 475,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1029:2:1"
+              "src": "1246:2:1"
             },
             "returnParameters": {
-              "id": 460,
+              "id": 479,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 459,
+                  "id": 478,
                   "mutability": "mutable",
                   "name": "authStore",
-                  "nameLocation": "1083:9:1",
+                  "nameLocation": "1300:9:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 469,
-                  "src": "1054:38:1",
+                  "scope": 488,
+                  "src": "1271:38:1",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
@@ -1067,17 +1298,17 @@
                     "typeString": "struct LibAuthorisation.AuthorisationStorage"
                   },
                   "typeName": {
-                    "id": 458,
+                    "id": 477,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 457,
+                      "id": 476,
                       "name": "AuthorisationStorage",
                       "nodeType": "IdentifierPath",
                       "referencedDeclaration": 398,
-                      "src": "1054:20:1"
+                      "src": "1271:20:1"
                     },
                     "referencedDeclaration": 398,
-                    "src": "1054:20:1",
+                    "src": "1271:20:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                       "typeString": "struct LibAuthorisation.AuthorisationStorage"
@@ -1086,30 +1317,30 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1053:40:1"
+              "src": "1270:40:1"
             },
-            "scope": 470,
-            "src": "1000:255:1",
+            "scope": 489,
+            "src": "1217:255:1",
             "stateMutability": "pure",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 471,
-        "src": "27:1231:1",
+        "scope": 490,
+        "src": "27:1448:1",
         "usedErrors": []
       }
     ],
-    "src": "0:1258:1"
+    "src": "0:1475:1"
   },
   "legacyAST": {
     "absolutePath": "project:/contracts/Authorisation/LibAuthorisation.sol",
     "exportedSymbols": {
       "LibAuthorisation": [
-        470
+        489
       ]
     },
-    "id": 471,
+    "id": 490,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -1130,9 +1361,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 470,
+        "id": 489,
         "linearizedBaseContracts": [
-          470
+          489
         ],
         "name": "LibAuthorisation",
         "nameLocation": "35:16:1",
@@ -1145,7 +1376,7 @@
             "name": "AUTHORISATION_STORAGE",
             "nameLocation": "87:21:1",
             "nodeType": "VariableDeclaration",
-            "scope": 470,
+            "scope": 489,
             "src": "64:66:1",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1307,7 +1538,7 @@
             "name": "AuthorisationStorage",
             "nameLocation": "146:20:1",
             "nodeType": "StructDefinition",
-            "scope": 470,
+            "scope": 489,
             "src": "139:165:1",
             "visibility": "public"
           },
@@ -1381,7 +1612,7 @@
             "name": "Authorisation",
             "nameLocation": "319:13:1",
             "nodeType": "StructDefinition",
-            "scope": 470,
+            "scope": 489,
             "src": "312:85:1",
             "visibility": "public"
           },
@@ -1425,24 +1656,24 @@
           },
           {
             "body": {
-              "id": 431,
+              "id": 427,
               "nodeType": "Block",
-              "src": "579:165:1",
+              "src": "540:171:1",
               "statements": [
                 {
                   "assignments": [
-                    418
+                    413
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 418,
+                      "id": 413,
                       "mutability": "mutable",
                       "name": "authStore",
-                      "nameLocation": "619:9:1",
+                      "nameLocation": "580:9:1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 431,
-                      "src": "590:38:1",
+                      "scope": 427,
+                      "src": "551:38:1",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
@@ -1450,17 +1681,17 @@
                         "typeString": "struct LibAuthorisation.AuthorisationStorage"
                       },
                       "typeName": {
-                        "id": 417,
+                        "id": 412,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 416,
+                          "id": 411,
                           "name": "AuthorisationStorage",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 398,
-                          "src": "590:20:1"
+                          "src": "551:20:1"
                         },
                         "referencedDeclaration": 398,
-                        "src": "590:20:1",
+                        "src": "551:20:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                           "typeString": "struct LibAuthorisation.AuthorisationStorage"
@@ -1469,23 +1700,38 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 421,
+                  "id": 417,
                   "initialValue": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 419,
-                      "name": "authorisationStorage",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 469,
-                      "src": "631:20:1",
+                      "expression": {
+                        "id": 414,
+                        "name": "LibAuthorisation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 489,
+                        "src": "592:16:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_LibAuthorisation_$489_$",
+                          "typeString": "type(library LibAuthorisation)"
+                        }
+                      },
+                      "id": 415,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "authorisationStorage",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 488,
+                      "src": "592:37:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$__$returns$_t_struct$_AuthorisationStorage_$398_storage_ptr_$",
                         "typeString": "function () pure returns (struct LibAuthorisation.AuthorisationStorage storage pointer)"
                       }
                     },
-                    "id": 420,
+                    "id": 416,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1493,7 +1739,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "631:22:1",
+                    "src": "592:39:1",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
@@ -1501,7 +1747,223 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "590:63:1"
+                  "src": "551:80:1"
+                },
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 423,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "expression": {
+                            "id": 419,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4294967281,
+                            "src": "650:3:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 420,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "src": "650:10:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "expression": {
+                            "id": 421,
+                            "name": "authStore",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 413,
+                            "src": "664:9:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                              "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
+                            }
+                          },
+                          "id": 422,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "contractOwner",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 389,
+                          "src": "664:23:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "650:37:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 418,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
+                      "referencedDeclaration": 4294967278,
+                      "src": "642:7:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 424,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "642:46:1",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 425,
+                  "nodeType": "ExpressionStatement",
+                  "src": "642:46:1"
+                },
+                {
+                  "id": 426,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "699:1:1"
+                }
+              ]
+            },
+            "id": 428,
+            "name": "onlyContractOwner",
+            "nameLocation": "515:17:1",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 410,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "532:2:1"
+            },
+            "src": "506:205:1",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 450,
+              "nodeType": "Block",
+              "src": "796:165:1",
+              "statements": [
+                {
+                  "assignments": [
+                    437
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 437,
+                      "mutability": "mutable",
+                      "name": "authStore",
+                      "nameLocation": "836:9:1",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 450,
+                      "src": "807:38:1",
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                        "typeString": "struct LibAuthorisation.AuthorisationStorage"
+                      },
+                      "typeName": {
+                        "id": 436,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 435,
+                          "name": "AuthorisationStorage",
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 398,
+                          "src": "807:20:1"
+                        },
+                        "referencedDeclaration": 398,
+                        "src": "807:20:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                          "typeString": "struct LibAuthorisation.AuthorisationStorage"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 440,
+                  "initialValue": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 438,
+                      "name": "authorisationStorage",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 488,
+                      "src": "848:20:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$__$returns$_t_struct$_AuthorisationStorage_$398_storage_ptr_$",
+                        "typeString": "function () pure returns (struct LibAuthorisation.AuthorisationStorage storage pointer)"
+                      }
+                    },
+                    "id": 439,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "848:22:1",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
+                      "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "807:63:1"
                 },
                 {
                   "expression": {
@@ -1509,7 +1971,7 @@
                       "typeIdentifier": "t_enum$_Permissions_$409",
                       "typeString": "enum LibAuthorisation.Permissions"
                     },
-                    "id": 429,
+                    "id": 448,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1518,18 +1980,18 @@
                       "expression": {
                         "baseExpression": {
                           "expression": {
-                            "id": 422,
+                            "id": 441,
                             "name": "authStore",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 418,
-                            "src": "671:9:1",
+                            "referencedDeclaration": 437,
+                            "src": "888:9:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                               "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
                             }
                           },
-                          "id": 423,
+                          "id": 442,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -1537,20 +1999,20 @@
                           "memberName": "authorisations",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": 394,
-                          "src": "671:24:1",
+                          "src": "888:24:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Authorisation_$404_storage_$",
                             "typeString": "mapping(address => struct LibAuthorisation.Authorisation storage ref)"
                           }
                         },
-                        "id": 425,
+                        "id": 444,
                         "indexExpression": {
-                          "id": 424,
+                          "id": 443,
                           "name": "_address",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 411,
-                          "src": "696:8:1",
+                          "referencedDeclaration": 430,
+                          "src": "913:8:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1561,13 +2023,13 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "671:34:1",
+                        "src": "888:34:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_Authorisation_$404_storage",
                           "typeString": "struct LibAuthorisation.Authorisation storage ref"
                         }
                       },
-                      "id": 426,
+                      "id": 445,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -1575,7 +2037,7 @@
                       "memberName": "permission",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 403,
-                      "src": "671:45:1",
+                      "src": "888:45:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
@@ -1585,18 +2047,18 @@
                     "operator": "==",
                     "rightExpression": {
                       "expression": {
-                        "id": 427,
+                        "id": 446,
                         "name": "Permissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 409,
-                        "src": "720:11:1",
+                        "src": "937:11:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_type$_t_enum$_Permissions_$409_$",
                           "typeString": "type(enum LibAuthorisation.Permissions)"
                         }
                       },
-                      "id": 428,
+                      "id": 447,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1604,45 +2066,45 @@
                       "memberName": "user",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 406,
-                      "src": "720:16:1",
+                      "src": "937:16:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
                       }
                     },
-                    "src": "671:65:1",
+                    "src": "888:65:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 415,
-                  "id": 430,
+                  "functionReturnParameters": 434,
+                  "id": 449,
                   "nodeType": "Return",
-                  "src": "664:72:1"
+                  "src": "881:72:1"
                 }
               ]
             },
-            "id": 432,
+            "id": 451,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isUser",
-            "nameLocation": "515:6:1",
+            "nameLocation": "732:6:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 412,
+              "id": 431,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 411,
+                  "id": 430,
                   "mutability": "mutable",
                   "name": "_address",
-                  "nameLocation": "530:8:1",
+                  "nameLocation": "747:8:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 432,
-                  "src": "522:16:1",
+                  "scope": 451,
+                  "src": "739:16:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1650,10 +2112,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 410,
+                    "id": 429,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "522:7:1",
+                    "src": "739:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1663,21 +2125,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "521:18:1"
+              "src": "738:18:1"
             },
             "returnParameters": {
-              "id": 415,
+              "id": 434,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 414,
+                  "id": 433,
                   "mutability": "mutable",
                   "name": "authorised",
-                  "nameLocation": "568:10:1",
+                  "nameLocation": "785:10:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 432,
-                  "src": "563:15:1",
+                  "scope": 451,
+                  "src": "780:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1685,10 +2147,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 413,
+                    "id": 432,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "563:4:1",
+                    "src": "780:4:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1697,34 +2159,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "562:17:1"
+              "src": "779:17:1"
             },
-            "scope": 470,
-            "src": "506:238:1",
+            "scope": 489,
+            "src": "723:238:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 454,
+              "id": 473,
               "nodeType": "Block",
-              "src": "826:166:1",
+              "src": "1043:166:1",
               "statements": [
                 {
                   "assignments": [
-                    441
+                    460
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 441,
+                      "id": 460,
                       "mutability": "mutable",
                       "name": "authStore",
-                      "nameLocation": "866:9:1",
+                      "nameLocation": "1083:9:1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 454,
-                      "src": "837:38:1",
+                      "scope": 473,
+                      "src": "1054:38:1",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
@@ -1732,17 +2194,17 @@
                         "typeString": "struct LibAuthorisation.AuthorisationStorage"
                       },
                       "typeName": {
-                        "id": 440,
+                        "id": 459,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 439,
+                          "id": 458,
                           "name": "AuthorisationStorage",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 398,
-                          "src": "837:20:1"
+                          "src": "1054:20:1"
                         },
                         "referencedDeclaration": 398,
-                        "src": "837:20:1",
+                        "src": "1054:20:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                           "typeString": "struct LibAuthorisation.AuthorisationStorage"
@@ -1751,23 +2213,23 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 444,
+                  "id": 463,
                   "initialValue": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 442,
+                      "id": 461,
                       "name": "authorisationStorage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 469,
-                      "src": "878:20:1",
+                      "referencedDeclaration": 488,
+                      "src": "1095:20:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$__$returns$_t_struct$_AuthorisationStorage_$398_storage_ptr_$",
                         "typeString": "function () pure returns (struct LibAuthorisation.AuthorisationStorage storage pointer)"
                       }
                     },
-                    "id": 443,
+                    "id": 462,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1775,7 +2237,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "878:22:1",
+                    "src": "1095:22:1",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
@@ -1783,7 +2245,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "837:63:1"
+                  "src": "1054:63:1"
                 },
                 {
                   "expression": {
@@ -1791,7 +2253,7 @@
                       "typeIdentifier": "t_enum$_Permissions_$409",
                       "typeString": "enum LibAuthorisation.Permissions"
                     },
-                    "id": 452,
+                    "id": 471,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1800,18 +2262,18 @@
                       "expression": {
                         "baseExpression": {
                           "expression": {
-                            "id": 445,
+                            "id": 464,
                             "name": "authStore",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 441,
-                            "src": "918:9:1",
+                            "referencedDeclaration": 460,
+                            "src": "1135:9:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                               "typeString": "struct LibAuthorisation.AuthorisationStorage storage pointer"
                             }
                           },
-                          "id": 446,
+                          "id": 465,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -1819,20 +2281,20 @@
                           "memberName": "authorisations",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": 394,
-                          "src": "918:24:1",
+                          "src": "1135:24:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Authorisation_$404_storage_$",
                             "typeString": "mapping(address => struct LibAuthorisation.Authorisation storage ref)"
                           }
                         },
-                        "id": 448,
+                        "id": 467,
                         "indexExpression": {
-                          "id": 447,
+                          "id": 466,
                           "name": "_address",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 434,
-                          "src": "943:8:1",
+                          "referencedDeclaration": 453,
+                          "src": "1160:8:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1843,13 +2305,13 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "918:34:1",
+                        "src": "1135:34:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_struct$_Authorisation_$404_storage",
                           "typeString": "struct LibAuthorisation.Authorisation storage ref"
                         }
                       },
-                      "id": 449,
+                      "id": 468,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -1857,7 +2319,7 @@
                       "memberName": "permission",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 403,
-                      "src": "918:45:1",
+                      "src": "1135:45:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
@@ -1867,18 +2329,18 @@
                     "operator": "==",
                     "rightExpression": {
                       "expression": {
-                        "id": 450,
+                        "id": 469,
                         "name": "Permissions",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 409,
-                        "src": "967:11:1",
+                        "src": "1184:11:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_type$_t_enum$_Permissions_$409_$",
                           "typeString": "type(enum LibAuthorisation.Permissions)"
                         }
                       },
-                      "id": 451,
+                      "id": 470,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1886,45 +2348,45 @@
                       "memberName": "admin",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 407,
-                      "src": "967:17:1",
+                      "src": "1184:17:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_enum$_Permissions_$409",
                         "typeString": "enum LibAuthorisation.Permissions"
                       }
                     },
-                    "src": "918:66:1",
+                    "src": "1135:66:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 438,
-                  "id": 453,
+                  "functionReturnParameters": 457,
+                  "id": 472,
                   "nodeType": "Return",
-                  "src": "911:73:1"
+                  "src": "1128:73:1"
                 }
               ]
             },
-            "id": 455,
+            "id": 474,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "isAdmin",
-            "nameLocation": "761:7:1",
+            "nameLocation": "978:7:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 435,
+              "id": 454,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 434,
+                  "id": 453,
                   "mutability": "mutable",
                   "name": "_address",
-                  "nameLocation": "777:8:1",
+                  "nameLocation": "994:8:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 455,
-                  "src": "769:16:1",
+                  "scope": 474,
+                  "src": "986:16:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1932,10 +2394,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 433,
+                    "id": 452,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "769:7:1",
+                    "src": "986:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1945,21 +2407,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "768:18:1"
+              "src": "985:18:1"
             },
             "returnParameters": {
-              "id": 438,
+              "id": 457,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 437,
+                  "id": 456,
                   "mutability": "mutable",
                   "name": "authorised",
-                  "nameLocation": "815:10:1",
+                  "nameLocation": "1032:10:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 455,
-                  "src": "810:15:1",
+                  "scope": 474,
+                  "src": "1027:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1967,10 +2429,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 436,
+                    "id": 455,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "810:4:1",
+                    "src": "1027:4:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1979,34 +2441,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "809:17:1"
+              "src": "1026:17:1"
             },
-            "scope": 470,
-            "src": "752:240:1",
+            "scope": 489,
+            "src": "969:240:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 468,
+              "id": 487,
               "nodeType": "Block",
-              "src": "1094:161:1",
+              "src": "1311:161:1",
               "statements": [
                 {
                   "assignments": [
-                    462
+                    481
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 462,
+                      "id": 481,
                       "mutability": "mutable",
                       "name": "AUTHORISATION_STORAGE_POSITION",
-                      "nameLocation": "1113:30:1",
+                      "nameLocation": "1330:30:1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 468,
-                      "src": "1105:38:1",
+                      "scope": 487,
+                      "src": "1322:38:1",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2014,10 +2476,10 @@
                         "typeString": "bytes32"
                       },
                       "typeName": {
-                        "id": 461,
+                        "id": 480,
                         "name": "bytes32",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1105:7:1",
+                        "src": "1322:7:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
                           "typeString": "bytes32"
@@ -2026,16 +2488,16 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 466,
+                  "id": 485,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 464,
+                        "id": 483,
                         "name": "AUTHORISATION_STORAGE",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 387,
-                        "src": "1156:21:1",
+                        "src": "1373:21:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
                           "typeString": "bytes memory"
@@ -2049,18 +2511,18 @@
                           "typeString": "bytes memory"
                         }
                       ],
-                      "id": 463,
+                      "id": 482,
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 4294967288,
-                      "src": "1146:9:1",
+                      "src": "1363:9:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
                         "typeString": "function (bytes memory) pure returns (bytes32)"
                       }
                     },
-                    "id": 465,
+                    "id": 484,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -2068,7 +2530,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1146:32:1",
+                    "src": "1363:32:1",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
@@ -2076,26 +2538,26 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1105:73:1"
+                  "src": "1322:73:1"
                 },
                 {
                   "AST": {
                     "nodeType": "YulBlock",
-                    "src": "1198:50:1",
+                    "src": "1415:50:1",
                     "statements": [
                       {
                         "nodeType": "YulAssignment",
-                        "src": "1199:48:1",
+                        "src": "1416:48:1",
                         "value": {
                           "name": "AUTHORISATION_STORAGE_POSITION",
                           "nodeType": "YulIdentifier",
-                          "src": "1217:30:1"
+                          "src": "1434:30:1"
                         },
                         "variableNames": [
                           {
                             "name": "authStore.slot",
                             "nodeType": "YulIdentifier",
-                            "src": "1199:14:1"
+                            "src": "1416:14:1"
                           }
                         ]
                       }
@@ -2104,53 +2566,53 @@
                   "evmVersion": "london",
                   "externalReferences": [
                     {
-                      "declaration": 462,
+                      "declaration": 481,
                       "isOffset": false,
                       "isSlot": false,
-                      "src": "1217:30:1",
+                      "src": "1434:30:1",
                       "valueSize": 1
                     },
                     {
-                      "declaration": 459,
+                      "declaration": 478,
                       "isOffset": false,
                       "isSlot": true,
-                      "src": "1199:14:1",
+                      "src": "1416:14:1",
                       "suffix": "slot",
                       "valueSize": 1
                     }
                   ],
-                  "id": 467,
+                  "id": 486,
                   "nodeType": "InlineAssembly",
-                  "src": "1189:59:1"
+                  "src": "1406:59:1"
                 }
               ]
             },
-            "id": 469,
+            "id": 488,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "authorisationStorage",
-            "nameLocation": "1009:20:1",
+            "nameLocation": "1226:20:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 456,
+              "id": 475,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1029:2:1"
+              "src": "1246:2:1"
             },
             "returnParameters": {
-              "id": 460,
+              "id": 479,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 459,
+                  "id": 478,
                   "mutability": "mutable",
                   "name": "authStore",
-                  "nameLocation": "1083:9:1",
+                  "nameLocation": "1300:9:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 469,
-                  "src": "1054:38:1",
+                  "scope": 488,
+                  "src": "1271:38:1",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
@@ -2158,17 +2620,17 @@
                     "typeString": "struct LibAuthorisation.AuthorisationStorage"
                   },
                   "typeName": {
-                    "id": 458,
+                    "id": 477,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 457,
+                      "id": 476,
                       "name": "AuthorisationStorage",
                       "nodeType": "IdentifierPath",
                       "referencedDeclaration": 398,
-                      "src": "1054:20:1"
+                      "src": "1271:20:1"
                     },
                     "referencedDeclaration": 398,
-                    "src": "1054:20:1",
+                    "src": "1271:20:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_struct$_AuthorisationStorage_$398_storage_ptr",
                       "typeString": "struct LibAuthorisation.AuthorisationStorage"
@@ -2177,21 +2639,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1053:40:1"
+              "src": "1270:40:1"
             },
-            "scope": 470,
-            "src": "1000:255:1",
+            "scope": 489,
+            "src": "1217:255:1",
             "stateMutability": "pure",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 471,
-        "src": "27:1231:1",
+        "scope": 490,
+        "src": "27:1448:1",
         "usedErrors": []
       }
     ],
-    "src": "0:1258:1"
+    "src": "0:1475:1"
   },
   "compiler": {
     "name": "solc",
@@ -2199,7 +2661,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2022-02-13T08:21:14.315Z",
+  "updatedAt": "2022-02-14T00:29:17.383Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

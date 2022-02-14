@@ -1,0 +1,757 @@
+{
+  "contractName": "ContractRepository",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Proxy/ContractRepository.sol\":\"ContractRepository\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Proxy/ContractRepository.sol\":{\"keccak256\":\"0xde43fc40ae8829f928cdf00b1836c431a8264aff32af695b003cb8c81931021b\",\"urls\":[\"bzz-raw://9387d1728a961e0ade6e5530d11bafd9115a93f6c1393ff1c053750fa951fd8f\",\"dweb:/ipfs/QmUmBj4FpK8SQMvT7p4Zzsgr7wNz6bTKtkEpNFVGQuFyKw\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122066cd75122f748a39179d3ad010af03b8c8c8b26416fbb0be3ff7785c7a1e1f9d64736f6c634300080a0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122066cd75122f748a39179d3ad010af03b8c8c8b26416fbb0be3ff7785c7a1e1f9d64736f6c634300080a0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "27:463:3:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "27:463:3:-:0;;;;;;;;",
+  "source": "pragma solidity ^0.8.0;\r\n\r\nlibrary ContractRepository{\r\n\r\n    bytes private constant REPOSITORY_STORAGE = \"lib.repository\";\r\n\r\n    struct RepositoryStorage {\r\n        mapping(bytes4 => mapping(uint => address)) contractVersionStore;\r\n    }\r\n\r\n    function repositoryStorage() internal pure returns(RepositoryStorage storage repoStore) {\r\n        bytes32 REPOSITORY_STORAGE_POSITION = keccak256(REPOSITORY_STORAGE);\r\n        assembly {repoStore.slot := REPOSITORY_STORAGE_POSITION}\r\n    }\r\n}",
+  "sourcePath": "C:\\Users\\Julia\\Documents\\Development\\Blockchain\\CBDC\\smart_contracts\\contracts\\Proxy\\ContractRepository.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/Proxy/ContractRepository.sol",
+    "exportedSymbols": {
+      "ContractRepository": [
+        549
+      ]
+    },
+    "id": 550,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 524,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:3"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ContractRepository",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 549,
+        "linearizedBaseContracts": [
+          549
+        ],
+        "name": "ContractRepository",
+        "nameLocation": "35:18:3",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 527,
+            "mutability": "constant",
+            "name": "REPOSITORY_STORAGE",
+            "nameLocation": "85:18:3",
+            "nodeType": "VariableDeclaration",
+            "scope": 549,
+            "src": "62:60:3",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes_memory_ptr",
+              "typeString": "bytes"
+            },
+            "typeName": {
+              "id": 525,
+              "name": "bytes",
+              "nodeType": "ElementaryTypeName",
+              "src": "62:5:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes_storage_ptr",
+                "typeString": "bytes"
+              }
+            },
+            "value": {
+              "hexValue": "6c69622e7265706f7369746f7279",
+              "id": 526,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "string",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "106:16:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_stringliteral_2735273a585fab330fff78079bc8d46927ce2437cd4a7ef097bef032800d4e63",
+                "typeString": "literal_string \"lib.repository\""
+              },
+              "value": "lib.repository"
+            },
+            "visibility": "private"
+          },
+          {
+            "canonicalName": "ContractRepository.RepositoryStorage",
+            "id": 534,
+            "members": [
+              {
+                "constant": false,
+                "id": 533,
+                "mutability": "mutable",
+                "name": "contractVersionStore",
+                "nameLocation": "211:20:3",
+                "nodeType": "VariableDeclaration",
+                "scope": 534,
+                "src": "167:64:3",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_bytes4_$_t_mapping$_t_uint256_$_t_address_$_$",
+                  "typeString": "mapping(bytes4 => mapping(uint256 => address))"
+                },
+                "typeName": {
+                  "id": 532,
+                  "keyType": {
+                    "id": 528,
+                    "name": "bytes4",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "175:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes4",
+                      "typeString": "bytes4"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "167:43:3",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_bytes4_$_t_mapping$_t_uint256_$_t_address_$_$",
+                    "typeString": "mapping(bytes4 => mapping(uint256 => address))"
+                  },
+                  "valueType": {
+                    "id": 531,
+                    "keyType": {
+                      "id": 529,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "193:4:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "185:24:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                      "typeString": "mapping(uint256 => address)"
+                    },
+                    "valueType": {
+                      "id": 530,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "201:7:3",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    }
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "RepositoryStorage",
+            "nameLocation": "138:17:3",
+            "nodeType": "StructDefinition",
+            "scope": 549,
+            "src": "131:108:3",
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 547,
+              "nodeType": "Block",
+              "src": "335:152:3",
+              "statements": [
+                {
+                  "assignments": [
+                    541
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 541,
+                      "mutability": "mutable",
+                      "name": "REPOSITORY_STORAGE_POSITION",
+                      "nameLocation": "354:27:3",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 547,
+                      "src": "346:35:3",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      },
+                      "typeName": {
+                        "id": 540,
+                        "name": "bytes32",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "346:7:3",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 545,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 543,
+                        "name": "REPOSITORY_STORAGE",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 527,
+                        "src": "394:18:3",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      ],
+                      "id": 542,
+                      "name": "keccak256",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4294967288,
+                      "src": "384:9:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
+                        "typeString": "function (bytes memory) pure returns (bytes32)"
+                      }
+                    },
+                    "id": 544,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "384:29:3",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "346:67:3"
+                },
+                {
+                  "AST": {
+                    "nodeType": "YulBlock",
+                    "src": "433:47:3",
+                    "statements": [
+                      {
+                        "nodeType": "YulAssignment",
+                        "src": "434:45:3",
+                        "value": {
+                          "name": "REPOSITORY_STORAGE_POSITION",
+                          "nodeType": "YulIdentifier",
+                          "src": "452:27:3"
+                        },
+                        "variableNames": [
+                          {
+                            "name": "repoStore.slot",
+                            "nodeType": "YulIdentifier",
+                            "src": "434:14:3"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "evmVersion": "london",
+                  "externalReferences": [
+                    {
+                      "declaration": 541,
+                      "isOffset": false,
+                      "isSlot": false,
+                      "src": "452:27:3",
+                      "valueSize": 1
+                    },
+                    {
+                      "declaration": 538,
+                      "isOffset": false,
+                      "isSlot": true,
+                      "src": "434:14:3",
+                      "suffix": "slot",
+                      "valueSize": 1
+                    }
+                  ],
+                  "id": 546,
+                  "nodeType": "InlineAssembly",
+                  "src": "424:56:3"
+                }
+              ]
+            },
+            "id": 548,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "repositoryStorage",
+            "nameLocation": "256:17:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 535,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "273:2:3"
+            },
+            "returnParameters": {
+              "id": 539,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 538,
+                  "mutability": "mutable",
+                  "name": "repoStore",
+                  "nameLocation": "324:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 548,
+                  "src": "298:35:3",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_RepositoryStorage_$534_storage_ptr",
+                    "typeString": "struct ContractRepository.RepositoryStorage"
+                  },
+                  "typeName": {
+                    "id": 537,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 536,
+                      "name": "RepositoryStorage",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 534,
+                      "src": "298:17:3"
+                    },
+                    "referencedDeclaration": 534,
+                    "src": "298:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_RepositoryStorage_$534_storage_ptr",
+                      "typeString": "struct ContractRepository.RepositoryStorage"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "297:37:3"
+            },
+            "scope": 549,
+            "src": "247:240:3",
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 550,
+        "src": "27:463:3",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:490:3"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/Proxy/ContractRepository.sol",
+    "exportedSymbols": {
+      "ContractRepository": [
+        549
+      ]
+    },
+    "id": 550,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 524,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:3"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ContractRepository",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 549,
+        "linearizedBaseContracts": [
+          549
+        ],
+        "name": "ContractRepository",
+        "nameLocation": "35:18:3",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "id": 527,
+            "mutability": "constant",
+            "name": "REPOSITORY_STORAGE",
+            "nameLocation": "85:18:3",
+            "nodeType": "VariableDeclaration",
+            "scope": 549,
+            "src": "62:60:3",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bytes_memory_ptr",
+              "typeString": "bytes"
+            },
+            "typeName": {
+              "id": 525,
+              "name": "bytes",
+              "nodeType": "ElementaryTypeName",
+              "src": "62:5:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes_storage_ptr",
+                "typeString": "bytes"
+              }
+            },
+            "value": {
+              "hexValue": "6c69622e7265706f7369746f7279",
+              "id": 526,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "string",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "106:16:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_stringliteral_2735273a585fab330fff78079bc8d46927ce2437cd4a7ef097bef032800d4e63",
+                "typeString": "literal_string \"lib.repository\""
+              },
+              "value": "lib.repository"
+            },
+            "visibility": "private"
+          },
+          {
+            "canonicalName": "ContractRepository.RepositoryStorage",
+            "id": 534,
+            "members": [
+              {
+                "constant": false,
+                "id": 533,
+                "mutability": "mutable",
+                "name": "contractVersionStore",
+                "nameLocation": "211:20:3",
+                "nodeType": "VariableDeclaration",
+                "scope": 534,
+                "src": "167:64:3",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_bytes4_$_t_mapping$_t_uint256_$_t_address_$_$",
+                  "typeString": "mapping(bytes4 => mapping(uint256 => address))"
+                },
+                "typeName": {
+                  "id": 532,
+                  "keyType": {
+                    "id": 528,
+                    "name": "bytes4",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "175:6:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes4",
+                      "typeString": "bytes4"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "167:43:3",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_bytes4_$_t_mapping$_t_uint256_$_t_address_$_$",
+                    "typeString": "mapping(bytes4 => mapping(uint256 => address))"
+                  },
+                  "valueType": {
+                    "id": 531,
+                    "keyType": {
+                      "id": 529,
+                      "name": "uint",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "193:4:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "185:24:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                      "typeString": "mapping(uint256 => address)"
+                    },
+                    "valueType": {
+                      "id": 530,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "201:7:3",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    }
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "RepositoryStorage",
+            "nameLocation": "138:17:3",
+            "nodeType": "StructDefinition",
+            "scope": 549,
+            "src": "131:108:3",
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 547,
+              "nodeType": "Block",
+              "src": "335:152:3",
+              "statements": [
+                {
+                  "assignments": [
+                    541
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 541,
+                      "mutability": "mutable",
+                      "name": "REPOSITORY_STORAGE_POSITION",
+                      "nameLocation": "354:27:3",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 547,
+                      "src": "346:35:3",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes32",
+                        "typeString": "bytes32"
+                      },
+                      "typeName": {
+                        "id": 540,
+                        "name": "bytes32",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "346:7:3",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 545,
+                  "initialValue": {
+                    "arguments": [
+                      {
+                        "id": 543,
+                        "name": "REPOSITORY_STORAGE",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 527,
+                        "src": "394:18:3",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bytes_memory_ptr",
+                          "typeString": "bytes memory"
+                        }
+                      ],
+                      "id": 542,
+                      "name": "keccak256",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4294967288,
+                      "src": "384:9:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
+                        "typeString": "function (bytes memory) pure returns (bytes32)"
+                      }
+                    },
+                    "id": 544,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "384:29:3",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "346:67:3"
+                },
+                {
+                  "AST": {
+                    "nodeType": "YulBlock",
+                    "src": "433:47:3",
+                    "statements": [
+                      {
+                        "nodeType": "YulAssignment",
+                        "src": "434:45:3",
+                        "value": {
+                          "name": "REPOSITORY_STORAGE_POSITION",
+                          "nodeType": "YulIdentifier",
+                          "src": "452:27:3"
+                        },
+                        "variableNames": [
+                          {
+                            "name": "repoStore.slot",
+                            "nodeType": "YulIdentifier",
+                            "src": "434:14:3"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "evmVersion": "london",
+                  "externalReferences": [
+                    {
+                      "declaration": 541,
+                      "isOffset": false,
+                      "isSlot": false,
+                      "src": "452:27:3",
+                      "valueSize": 1
+                    },
+                    {
+                      "declaration": 538,
+                      "isOffset": false,
+                      "isSlot": true,
+                      "src": "434:14:3",
+                      "suffix": "slot",
+                      "valueSize": 1
+                    }
+                  ],
+                  "id": 546,
+                  "nodeType": "InlineAssembly",
+                  "src": "424:56:3"
+                }
+              ]
+            },
+            "id": 548,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "repositoryStorage",
+            "nameLocation": "256:17:3",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 535,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "273:2:3"
+            },
+            "returnParameters": {
+              "id": 539,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 538,
+                  "mutability": "mutable",
+                  "name": "repoStore",
+                  "nameLocation": "324:9:3",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 548,
+                  "src": "298:35:3",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_RepositoryStorage_$534_storage_ptr",
+                    "typeString": "struct ContractRepository.RepositoryStorage"
+                  },
+                  "typeName": {
+                    "id": 537,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 536,
+                      "name": "RepositoryStorage",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 534,
+                      "src": "298:17:3"
+                    },
+                    "referencedDeclaration": 534,
+                    "src": "298:17:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_RepositoryStorage_$534_storage_ptr",
+                      "typeString": "struct ContractRepository.RepositoryStorage"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "297:37:3"
+            },
+            "scope": 549,
+            "src": "247:240:3",
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 550,
+        "src": "27:463:3",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:490:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.10+commit.fc410830.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2022-02-14T00:29:17.392Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

@@ -39,6 +39,17 @@ contract Authorisation{
         _;
     }
 
+    function setContractOwner() public returns (bool success) {
+        LibAuthorisation.AuthorisationStorage storage authStore = LibAuthorisation.authorisationStorage();
+        if (authStore.contractOwner != address(0)){
+            require(msg.sender != authStore.contractOwner);
+        }
+        else{
+            authStore.contractOwner=msg.sender;
+        }
+        return true;
+    }
+
     /// @notice CRUD for authorisations
     /// @dev Uses a statically sized struct as input (Web3j compatible)
     /// @return success CRUD operation status
@@ -65,7 +76,6 @@ contract Authorisation{
         external 
         onlyContractOwner
         validPermission(_authorisation.permission) 
-        existingUser(_authorisation.owner) 
         returns (bool success)
     {
         LibAuthorisation.AuthorisationStorage storage authStore = LibAuthorisation.authorisationStorage();
@@ -97,6 +107,9 @@ contract Authorisation{
     {
         require(_authorisation.owner != address(0));
         LibAuthorisation.AuthorisationStorage storage authStore = LibAuthorisation.authorisationStorage();
+        if (_authorisation.permission == LibAuthorisation.Permissions.admin){
+            require(msg.sender == authStore.contractOwner);
+        }
         authStore.authorisations[_authorisation.owner] = _authorisation;
         return true;
     }
